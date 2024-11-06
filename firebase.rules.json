@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('username').val() === 'admin')"
+      }
+    },
+    "playlists": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('username').val() === 'admin')",
+        "$playlistId": {
+          ".validate": "newData.hasChildren(['name', 'cover', 'tracks'])",
+          "tracks": {
+            "$trackId": {
+              ".validate": "newData.hasChildren(['id', 'title', 'artist', 'youtubeId', 'duration', 'albumCover'])"
+            }
+          }
+        }
+      }
+    }
+  }
+}
